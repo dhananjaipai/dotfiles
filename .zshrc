@@ -1,6 +1,5 @@
 # zmodload zsh/zprof
 setopt \
-	auto_cd \
 	auto_param_slash \
 	extended_glob \
 	extended_history \
@@ -20,64 +19,128 @@ setopt \
 	no_prompt_subst \
 	share_history
 
+# Do not lose history!
 export HISTSIZE='1000000000'
 export SAVEHIST='1000000000'
 
-## OhMyZSH
-export DISABLE_AUTO_UPDATE=true #Update manually to speed load times
+# region: OhMyZSH
+export DISABLE_AUTO_UPDATE=true #Update OhMyZsh manually to speed up load times
 
 export ZSH="$HOME/.oh-my-zsh"
-# shellcheck disable=2034 # Used by OhMyZsh
 plugins=(
-	git
-	last-working-dir
-	web-search
-	evalcache
-	auto-notify
-	zsh-autosuggestions
-	zsh-history-substring-search
-	zsh-syntax-highlighting
-	copybuffer # Use Ctrl+o to copy current command line command
-	thefuck    # Esc+Esc to edit last command
-	extract    # Can unzip any data type
-	# sudo # Competes with thefuck
-	# dotenv
-	# per-directory-history # Use Ctrl+g to switch to directory-based history for faster switching
+	evalcache												# Faster Zsh Load times by caching eval outputs; 				Install: git clone https://github.com/mroth/evalcache ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/evalcache
+	zsh-autosuggestions							# Autocompletions based on history; 										Install: git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+	zsh-history-substring-search		# Allows fuzzy searching history; 											Install: git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+	zsh-syntax-highlighting					# Enabled syntax highlighting in zsh; 									Install: git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+	auto-notify											# Notifications when long running processes complete; 	Install: git clone https://github.com/MichaelAquilina/zsh-auto-notify ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/auto-notify
+	last-working-dir								# Adds a command `lwd` that allows easy switching to last working directory from other shells
+	copybuffer 											# Use Ctrl+o to copy current command line command; Ref: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/copybuffer
+	thefuck    											# Esc+Esc to edit last command; Conflicts with sudo; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/thefuck/README.md
+	extract    											# Can unzip any compression type with `x`; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/extract/extract.plugin.zsh
+	# web-search										# Allows to open search results using aliases; just alias ddg and perplexity.ai manually below
+	# git														# Common git aliases; just aliased useful ones manually below
+	# sudo 													# Esc+Esc to run last command as sudo; Conflicts with thefuck
+	# dotenv 												# Using autoenv instead since it supports any shell scripts and functions
+	# per-directory-history 				# Use Ctrl+g to switch to directory-based history for faster switching; not very useful
 )
-# shellcheck disable=1090 # Dynamic path to OhMyZsh
+
 source "$ZSH/oh-my-zsh.sh"
+# endregion: OhMyZSH
 
-# export ZSH_DOTENV_PROMPT=false ## Use direnv instead to clear env on exit
+# region: History substring search
+export HISTORY_SUBSTRING_SEARCH_FUZZY=1 # Allow fuzzy search on history
+bindkey "${terminfo[kcuu1]}" history-substring-search-up
+bindkey "${terminfo[kcud1]}" history-substring-search-down
+# endregion: History substring search
 
-### Fix slowness of pastes with zsh-syntax-highlighting.zsh
-# shellcheck disable=2296,2298
+# region: Auto notify
+export AUTO_NOTIFY_THRESHOLD=60
+export AUTO_NOTIFY_IGNORE=("ssh" "sleep")
+# endregion: Auto notify
+
+# region: WebSearch
+alias ai='__perplexity(){ local param=$(omz_urlencode "$*"); open_command "https://www.perplexity.ai/?s=o&q=$param" }; __perplexity'
+alias ddg='__ddg(){ local param=$(omz_urlencode "$*"); open_command "https://duckduckgo.com/q=$param" }; __ddg'
+# endregion: WebSearch
+
+# region: Git aliases
+alias gst='git status'
+alias gss='git status --short'
+alias glo='git log --oneline --decorate'
+alias grf='git reflog'
+alias gt='git tag --annotate'
+alias gts='git tag --sign'
+alias gtv='git tag | sort -V'
+alias gc='git commit'
+alias gm='git merge'
+alias gms='git merge --squash'
+alias gcs='git commit --gpg-sign' # Sign with a valid GPG key
+alias gaa='git add --all' # Stage all changes
+alias ggpull='git pull origin "$(git_current_branch)"' # Pull current branch from origin
+alias ggpush='git push origin "$(git_current_branch)"' # Push current branch to origin
+alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"' # Commit a WIP commit; can be reverted with gunwip after switching back to the branch; Alternative is to stash and move and apply later; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/git/git.plugin.zsh#L110
+alias gunwip='git rev-list --max-count=1 --format="%s" HEAD | grep -q "\--wip--" && git reset HEAD~1' # Reset a WIP commit and continue working; Better alternative may be to stash in case you want to pull upstream changes in the same branch; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/git/git.plugin.zsh#L359
+function gb() { # Checkout to a new branch if it exists or create a branch and checkout; Ref: https://stackoverflow.com/a/26961416/8453502
+	git checkout "$1" 2>/dev/null || git checkout -b "$1";
+}
+function gbda() { # Delete all merged branches; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/git/git.plugin.zsh#L131C1-L133C2
+  git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null
+}
+function gbds() { # Delete all squash merged branches; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/git/git.plugin.zsh#L137C1-L148C2
+  local default_branch=$(git_main_branch)
+  (( ! $? )) || default_branch=$(git_develop_branch)
+
+  git for-each-ref refs/heads/ "--format=%(refname:short)" | \
+    while read branch; do
+      local merge_base=$(git merge-base $default_branch $branch)
+      if [[ $(git cherry $default_branch $(git commit-tree $(git rev-parse $branch\^{tree}) -p $merge_base -m _)) = -* ]]; then
+        git branch -D $branch
+      fi
+    done
+}
+function ggu() { # Rebases current branch with changes from origin
+  [[ "$#" != 1 ]] && local b="$(git_current_branch)" # git_current_branch is part of OhMyZsh lib/git.zsh
+  git pull --rebase origin "${b:=$1}"
+}
+function gggg() { gaa; gc -m "wip: debugging; squash this!"; ggpush; } # Just push current changes
+# endregion: Git aliases
+
+# region: Zsh Syntax Highlighting fix; Ref: https://gist.github.com/magicdude4eva/2d4748f8ef3e6bf7b1591964c201c1ab
 pasteinit() {
   OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
   zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
 }
-zstyle :bracketed-paste-magic paste-init pasteinit
 pastefinish() {
   zle -N self-insert "$OLD_SELF_INSERT"
 }
+zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
-### Fix slowness of pastes
+# endregion Zsh Syntax Highlighting fix
 
-## Basic auto/tab complete for command options
+# region: Zsh tab completions for command options
+_comp_options+=(globdots) # Include hidden files
 # autoload -U compinit # Already part of OhmyZSH
 zstyle ':completion:*' menu select
 zmodload zsh/complist
 # compinit # Already part of OhmyZSH
-_comp_options+=(globdots) # Include hidden files
+# endregion: Zsh Tab completions
 
+# region: Custom completions
+_evalcache docker completion zsh
+_evalcache kubectl completion zsh
+_evalcache minikube completion zsh
+# endregion: Custom completions
+
+# region: Starship prompt
 ## Configure prompt icon based on OS
 macos=""
 # ubuntu=""
 # raspbian=""
 export STARSHIP_PROMPT_DISTRO="$macos"
 _evalcache /usr/local/bin/starship init zsh --print-full-init
+# endregion: Starship
 
-# _evalcache direnv hook zsh # Replaced with autoenv
-
+# region: autoenv + zoxide; Ref: https://github.com/hyperupcall/autoenv and https://github.com/ajeetdsouza/zoxide
 export AUTOENV_ENABLE_LEAVE='yes'         # Run .env.leave when leaving directory
 export AUTOENV_PRESERVE_CD='yes'          # Do not overwrite `cd`; Done through ZOxide
 source /usr/local/opt/autoenv/activate.sh # Setup autoenv
@@ -85,72 +148,17 @@ _evalcache zoxide init zsh --cmd cd       # Setup Zoxide and overwrite `cd`
 function __zoxide_cd() {
 	autoenv_cd "${@}"
 } # Overwite ZOxide to use autoenv
+# endregion: autoenv + zoxide
 
-_evalcache docker completion zsh
-_evalcache kubectl completion zsh
-_evalcache minikube completion zsh
-_evalcache thefuck --alias
-_evalcache fzf --zsh
-
+# region: fzf
 # Set up fzf key bindings and fuzzy completion
-export HISTORY_SUBSTRING_SEARCH_FUZZY=1 # Allow fuzzy search on history
 export FZF_COMPLETION_TRIGGER="*"
 export FZF_DEFAULT_OPTS="--layout=reverse --history=$HOME/.fzf-history"
+_evalcache fzf --zsh
+# endregion: fzf
 
-# Configure auto-notify plugin for notifications
-export AUTO_NOTIFY_THRESHOLD=60
-export AUTO_NOTIFY_IGNORE=("out" "sleep")
-
-# To work with VSCode integrated terminal
-# shellcheck disable=2154 # ZSH sets the values
-bindkey "${terminfo[kcuu1]}" history-substring-search-up
-bindkey "${terminfo[kcud1]}" history-substring-search-down
-
-# macOS
-alias flushdownloads="sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2 'delete from LSQuarantineEvent'"
-alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder; sudo killall mDNSResponderHelper"
-alias wifipasswordshow="security find-generic-password -wa"
-bindkey "${terminfo[kcud1]}" history-substring-search-down
-
-# alias
-alias copy="pbcopy"   # MacOs
-alias paste="pbpaste" # MacOs
-# alias copy="xclip -sel clip"
-# alias paste="xclip -out -sel clip"
-alias rm="trash"
-alias hs="history | grep --color -i"
-alias grep='grep --color'
-alias ls="lsd --color always --icon always --group-directories-first"
-alias ll="lsd --color always --icon always --group-directories-first --long -a"
-alias lst="lsd --color always --icon always --group-directories-first --tree"
-alias p="proxychains4"
-alias k="kubectl"
-alias ksn="kubectl config set-context --current --namespace"
-alias h="helm"
-alias t="terraform"
-alias tap="terraform apply --auto-approve"
-alias a="ansible"
-alias ap="ansible-playbook"
-alias fk="fuck"
-alias k8s="touch .k8s"
-alias xk8s="rm .k8s"
-alias socksup="networksetup -setsocksfirewallproxystate Wi-Fi on"
-alias socksdown="networksetup -setsocksfirewallproxystate Wi-Fi off"
-alias proxyup="networksetup -setwebproxystate Wi-Fi on && networksetup -setsecurewebproxystate Wi-Fi on"
-alias proxydown="networksetup -setwebproxystate Wi-Fi off && networksetup -setsecurewebproxystate Wi-Fi off"
-alias socks="ssh -D 50000 -nNT pi@192.168.2.222"
-alias shellproxy="export https_proxy=socks5h://192.168.2.222:50000 && export http_proxy=socks5h://192.168.2.222:50000"
-
-# Copy last command with ctrl-x:
-alias cc="fc -lnr -1 | copy"
-bindkey -s '^x' 'cc\n'
-
-unalias md
-function md() { [[ $# == 1 ]] && mkdir -p "$1" && cd "$1" || return; }
-compdef _directories md
-
-# Use lf to switch directories and bind it to ctrl-o
-
+# region: lf terminal file manager
+# Use lf to switch directories and bind it to ctrl-p
 lfcd() {
 	\umask 077
 	tmp="$(command mktemp)"
@@ -166,12 +174,52 @@ lfcd() {
 	fi
 }
 bindkey -s '^p' 'lfcd\n'
+# endregion: lf terminal file manager
 
-function timezsh() {
+# region: macOS poweruser aliases
+alias flushdownloads="sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2 'delete from LSQuarantineEvent'"
+alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder; sudo killall mDNSResponderHelper"
+alias wifipasswordshow="security find-generic-password -wa"
+alias socksup="networksetup -setsocksfirewallproxystate Wi-Fi on"
+alias socksdown="networksetup -setsocksfirewallproxystate Wi-Fi off"
+alias proxyup="networksetup -setwebproxystate Wi-Fi on && networksetup -setsecurewebproxystate Wi-Fi on"
+alias proxydown="networksetup -setwebproxystate Wi-Fi off && networksetup -setsecurewebproxystate Wi-Fi off"
+# endregion: macOS poweruser aliases
+
+# region: Custom aliases
+alias copy="pbcopy"
+alias paste="pbpaste"
+alias rm="trash"
+alias grep='grep --color'
+alias ls="lsd --color always --icon always --group-directories-first"
+alias ll="lsd --color always --icon always --group-directories-first --long -a"
+alias lst="lsd --color always --icon always --group-directories-first --tree"
+alias p="proxychains4"
+alias k="kubectl"
+alias ksn="kubectl config set-context --current --namespace"
+alias h="helm"
+alias t="terraform"
+alias tap="terraform apply --auto-approve"
+alias a="ansible"
+alias ap="ansible-playbook"
+alias socks="ssh -D 50000 -nNT pi &"
+alias shellproxy="export https_proxy=socks5h://localhost:50000 && export http_proxy=socks5h://localhost:50000"
+alias cc="fc -lnr -1 | copy"; bindkey -s '^x' 'cc\n' # Copy last command with ctrl-x
+unalias md; function md() { [[ $# == 1 ]] && mkdir -p "$1" && cd "$1" || return; } # make and change to directory
+compdef _directories md
+function setupdocker() {
+	eval "$(minikube -p minikube docker-env)"
+}
+
+# endregion: Custom aliases
+
+# region: Zsh Utils
+function timezsh() { # Look at time taken to start zsh
 	shell=${1-$SHELL}
 	for i in $(seq 1 10); do /usr/bin/time "$shell" -i -c exit; done
 }
 
+# record all commands and outputs to a file
 function record() {
 	suffix=$1
 	[[ -z "${suffix}" ]] && suffix=$(date "+%Y%m%d")
@@ -195,10 +243,6 @@ function delete-recording() {
 		[ $ans = 'y' ] && echo 'deleting files...' && \rm -v "${HOME}/.zsh-recording-"* || echo 'cancelled.'
 	fi
 }
+# endregion: Zsh Utils
 
-### functions
-function setupdocker() {
-	eval "$(minikube -p minikube docker-env)"
-}
-# EDITOR="code --wait" fc ## Use VSCode to edit commands
 # zprof

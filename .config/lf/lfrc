@@ -1,0 +1,8 @@
+map <enter> quit
+map <esc> shell
+map c copy
+map x cut
+map v paste
+map . set hidden!
+map d
+map dd $IFS=':'; rm -rf $fx

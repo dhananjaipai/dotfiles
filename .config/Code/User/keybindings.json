@@ -1,0 +1,394 @@
+[
+  // #region: bookmarks Ctrl+b [b/Backspace/Left/Up/Down]
+  {
+    "key": "ctrl+b b",
+    "command": "bookmarks.listFromAllFiles",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+b backspace",
+    "command": "bookmarks.clearFromAllFiles",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+b left",
+    "command": "bookmarks.toggle",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+b up",
+    "command": "bookmarks.jumpToPrevious",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+b down",
+    "command": "bookmarks.jumpToNext",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+cmd+l",
+    "command": "-bookmarks.jumpToNext",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+cmd+j",
+    "command": "-bookmarks.jumpToPrevious",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+l",
+    "command": "-bookmarks.expandSelectionToNext",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+j",
+    "command": "-bookmarks.expandSelectionToPrevious",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+k",
+    "command": "-bookmarks.shrinkSelection",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+cmd+k",
+    "command": "-bookmarks.toggle",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+b",
+    "command": "-cursorLeft",
+    "when": "textInputFocus"
+  },
+  // #endregion
+  // #region: cSpell Ctrl+S, [Left(add)/Right(ignore)/Up/Down]
+  {
+    "key": "ctrl+s s",
+    "command": "cSpell.toggleEnableSpellChecker"
+  },
+  {
+    "key": "ctrl+s left",
+    "command": "cSpell.addWordToUserSettings",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+s right",
+    "command": "cSpell.addIgnoreWordsToUser",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+s down",
+    "command": "cSpell.goToNextSpellingIssue",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+s up",
+    "command": "cSpell.goToPreviousSpellingIssue",
+    "when": "editorTextFocus"
+  },
+  // #endregion
+  // #region: Select
+  {
+    "key": "ctrl+a",
+    "when": "editorTextFocus",
+    "command": "selectby.regex",
+    "args": [
+      "markdown_code"
+    ]
+  },
+  // #endregion
+  // #region: Terminal Run Cmd+T / Cmd+Alt+T
+  // Zsh shortcuts - Ctrl+x; cc / copy last command
+  // Zsh shortcuts - Ctrl+o; copy current line buffer
+  {
+    "key": "cmd+t",
+    "command": "workbench.action.terminal.runSelectedText"
+  },
+  {
+    "key": "cmd+ctrl+t",
+    "command": "workbench.action.terminal.copyLastCommandOutput"
+  },
+  // #endregion
+  // #region: Command Runner - rgf;cc
+  {
+    "key": "cmd+ctrl+c",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        {
+          "command": "command-runner.run",
+          "args": {
+            "command": "copycommand"
+          }
+        }
+      ]
+    }
+  },
+  // #endregion
+  // #region: Code Runner Cmd+r
+  {
+    "key": "cmd+r",
+    "command": "code-runner.run",
+    "when": "editorHasSelection && editorLangId != 'http'"
+  },
+  {
+    "key": "cmd+r",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        {
+          "command": "expandLineSelection"
+        },
+        {
+          "command": "code-runner.run"
+        }
+      ]
+    },
+    "when": "!editorHasSelection && editorLangId != 'http'"
+  },
+  {
+    "key": "ctrl+alt+n",
+    "command": "-code-runner.run"
+  },
+  // #endregion
+  // #region: Rest client
+  {
+    "key": "cmd+r",
+    "command": "rest-client.request",
+    "when": "editorTextFocus && (editorLangId == 'http' || editorLangId == 'plaintext')"
+  },
+  {
+    "key": "alt+cmd+r",
+    "command": "-rest-client.request",
+    "when": "editorTextFocus && editorLangId == 'http'"
+  },
+  {
+    "key": "alt+cmd+r",
+    "command": "-rest-client.request",
+    "when": "editorTextFocus && editorLangId == 'plaintext'"
+  },
+  // #endregion
+  // #region: Find options Ctrl+f [f (fuzzy file), d (dir; terminal)]
+  {
+    "key": "ctrl+f",
+    "command": "-cursorRight",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+f f",
+    "command": "fuzzySearch.activeTextEditor",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+f d",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        {
+          "command": "command-runner.run",
+          "args": {
+            "command": "rgf"
+          }
+        },
+        {
+          "command": "workbench.action.terminal.focus"
+        }
+      ]
+    }
+  },
+  // #endregion
+  // #region: Fold options Ctrl+f [up, down, left, right]
+  {
+    "key": "ctrl+f left",
+    "command": "editor.fold",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  {
+    "key": "ctrl+f right",
+    "command": "editor.unfoldRecursively",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  {
+    "key": "ctrl+f up",
+    "command": "editor.foldAll",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  {
+    "key": "ctrl+f down",
+    "command": "editor.unfoldAll",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  {
+    "key": "alt+cmd+[",
+    "command": "-editor.fold",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  {
+    "key": "cmd+k cmd+]",
+    "command": "-editor.unfoldRecursively",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  {
+    "key": "cmd+k cmd+0",
+    "command": "-editor.foldAll",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  {
+    "key": "cmd+k cmd+j",
+    "command": "-editor.unfoldAll",
+    "when": "editorTextFocus && foldingEnabled"
+  },
+  // #endregion
+  // #region: Git Ctrl + g [h(file history), g(graph), r(refresh), a (add/stage file), s(stage selected range), d(unstage selected range), 1/2 (mark and compare selection), e(error lens), c (changes uncommitted), l (toggle gitlens)]
+  {
+    "key": "cmd+g",
+    "command": "-editor.action.nextMatchFindAction",
+    "when": "editorFocus"
+  },
+  {
+    "key": "cmd+g",
+    "command": "-workbench.action.terminal.findNext",
+    "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
+  },
+  {
+    "key": "cmd+g",
+    "command": "-workbench.action.terminal.goToRecentDirectory",
+    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+  },
+  {
+    "key": "cmd+g",
+    "command": "workbench.action.gotoLine"
+  },
+  {
+    "key": "ctrl+g",
+    "command": "-workbench.action.gotoLine"
+  },
+  {
+    "key": "ctrl+g g",
+    "command": "git-graph.view"
+  },
+  {
+    "key": "ctrl+g r",
+    "command": "git.refresh"
+  },
+  {
+    "key": "ctrl+g h",
+    "command": "gitlens.openFileHistory"
+  },
+  {
+    "key": "ctrl+g a",
+    "command": "git.stage",
+    "when": "!operationInProgress"
+  },
+  {
+    "key": "ctrl+g s",
+    "command": "git.stageSelectedRanges"
+  },
+  {
+    "key": "ctrl+g d",
+    "command": "git.unstageSelectedRanges"
+  },
+  {
+    "key": "ctrl+g c",
+    "command": "git.openChange",
+    "when": "config.git.enabled && scmActiveResourceHasChanges && !git.missing && !isInDiffEditor && !isMergeEditor && resourceScheme == 'file' && gitOpenRepositoryCount != '0'"
+  },
+  {
+    "key": "ctrl+g e",
+    "command": "errorLens.toggle"
+  },
+  {
+    "key": "ctrl+g 1",
+    "command": "extension.partialDiff.markSection1"
+  },
+  {
+    "key": "ctrl+g 2",
+    "command": "extension.partialDiff.markSection2AndTakeDiff"
+  },
+  {
+    "key": "ctrl+g l",
+    "command": "gitlens.toggleCodeLens",
+  },
+  {
+    "key": "cmd+k alt+cmd+s",
+    "command": "-git.stageSelectedRanges",
+    "when": "isInDiffEditor && !operationInProgress"
+  },
+  {
+    "key": "cmd+k cmd+n",
+    "command": "-git.unstageSelectedRanges",
+    "when": "isInDiffEditor && !operationInProgress"
+  },
+  // #endregion
+  // #region: Helm Preview
+  {
+    "key": "cmd+k v",
+    "command": "helm-template-preview-and-more.open-helm-template-preview",
+    "when": "editorLangId == 'helm'"
+  },
+  // #endregion
+  // #region: Edit Location Nav
+  // System Default
+  // {
+  // "key": "ctrl+-",
+  // "command": "workbench.action.navigateBack",
+  // "when": "canNavigateBack"
+  // },
+  {
+    "key": "ctrl+=",
+    "command": "workbench.action.navigateForward",
+    "when": "canNavigateForward"
+  },
+  {
+    "key": "ctrl+shift+-",
+    "command": "-workbench.action.navigateForward",
+    "when": "canNavigateForward"
+  },
+  // #endregion
+  // #region: Delete & Indent on Paste
+  {
+    "key": "ctrl+cmd+backspace",
+    "command": "extension.hungryDelete",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+backspace",
+    "command": "-extension.hungryDelete",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+v",
+    "command": "pasteAndIndent.action",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+shift+v",
+    "command": "editor.action.clipboardPasteAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+cmd+v",
+    "command": "-extension.pasteImage",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+cmd+v",
+    "command": "extension.pasteImage",
+    "when": "editorTextFocus"
+  },
+  // #endregion
+  // #region: Multi Cursor
+  // System Default
+  // "key": "alt+enter", Select all occurrences of find match
+  {
+    "key": "ctrl+cmd+l",
+    "command": "editor.action.insertCursorAtEndOfEachLineSelected",
+    "when": "editorHasSelection"
+  },
+  {
+    "key": "shift+alt+i",
+    "command": "-editor.action.insertCursorAtEndOfEachLineSelected",
+    "when": "editorTextFocus"
+  }
+  // #endregion
+]

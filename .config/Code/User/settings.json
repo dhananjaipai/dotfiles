@@ -1,0 +1,157 @@
+{
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[dotenv][env][shellscript][ignore]": {
+    "djpai.format.command": "shfmt \"{file}\"",
+    "djpai.format.mode": "inline_file_stdout",
+    "editor.defaultFormatter": "djpai.faster-format-with-cli"
+  },
+  "[helm]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
+  "[jinjaform]": {
+    "djpai.format.command": "sed '/^$/N;/^\\n$/D' | sed -e 's/{%/#{%/g' | terraform fmt -write=false - | sed -e 's/#{%/{%/g'",
+    "djpai.format.mode": "inline_stdin",
+    "editor.defaultFormatter": "djpai.faster-format-with-cli"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[just]": {
+    "djpai.format.command": "just --fmt --unstable --justfile \"{file}\"",
+    "djpai.format.mode": "inline_file"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  },
+  "[packer]": {
+    "djpai.format.command": "sed '/^$/N;/^\\n$/D' | packer fmt -",
+    "djpai.format.mode": "inline_stdin",
+    "editor.defaultFormatter": "djpai.faster-format-with-cli"
+  },
+  "[plaintext]": {
+    "djpai.format.command": "cat \"{file}\"",
+    "djpai.format.mode": "inline_file",
+    "editor.defaultFormatter": "djpai.faster-format-with-cli",
+    "editor.formatOnSave": false,
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false
+  },
+  "[terraform]": {
+    "djpai.format.command": "sed '/^$/N;/^\\n$/D' | terraform fmt -",
+    "djpai.format.mode": "inline_stdin",
+    "editor.defaultFormatter": "djpai.faster-format-with-cli"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "code-runner.runInTerminal": false,
+  "color-highlight.markerType": "background",
+  "color-highlight.markRuler": false,
+  "command-runner.commands": {
+    "copycommand": "cc",
+    "rgf": "rgf"
+  },
+  "conventionalCommits.gitmoji": false,
+  "conventionalCommits.lineBreak": "\\n",
+  "conventionalCommits.promptFooter": false,
+  "cSpell.enabled": false,
+  "cSpell.ignoreWords": [],
+  "cSpell.userWords": [],
+  "diffEditor.ignoreTrimWhitespace": true,
+  "diffEditor.useInlineViewWhenSpaceIsLimited": false,
+  "djpai.format.command": "npx prettier --ignore-unknown \"{file}\"",
+  "djpai.format.mode": "inline_file_stdout",
+  "editor.colorDecorators": false,
+  "editor.copyWithSyntaxHighlighting": false,
+  "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 12,
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "editor.lineHeight": 0,
+  "editor.renderControlCharacters": true,
+  "editor.stickyScroll.enabled": false,
+  "editor.tabSize": 2,
+  "editor.tokenColorCustomizations": {},
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "errorLens.enabled": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "extensions.ignoreRecommendations": true,
+  "files.associations": {
+    "*.j2": "jinjaform",
+    ".env*": "env",
+    "editor.foldingStrategy": "auto"
+  },
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.openRepositoryInParentFolders": "never",
+  "git.smartCommitChanges": "all",
+  "gitlens.changes.locations": [
+    "gutter",
+    "line"
+  ],
+  "gitlens.codeLens.enabled": false,
+  "gitlens.gitCommands.closeOnFocusOut": true,
+  "gitlens.keymap": "none",
+  "gitlens.mode.active": "review",
+  "gitlens.mode.statusBar.enabled": false,
+  "gitlens.statusBar.enabled": false,
+  "gitlens.terminalLinks.enabled": false,
+  "hadolint.hadolintPath": "/usr/local/bin/hadolint",
+  // "http.proxy": "socks5h://localhost:50000",
+  // "http.proxyStrictSSL": false,
+  "indentRainbow.colors": [
+    "rgba(29, 78, 137,0.15)",
+    "rgba(58, 178, 202,0.15)",
+    "rgba(125, 207, 182, 0.15)",
+    "rgba(251, 209, 162,0.15)",
+    "rgba(247, 146, 86,0.15)",
+    "rgba(247, 146, 86,0.1)",
+    "rgba(247, 146, 86,0.05)"
+  ],
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "Notes.notesLocation": "/Users/a1079774/Downloads/scratchpad",
+  "remote.extensionKind": {},
+  "security.workspace.trust.untrustedFiles": "open",
+  "selectby.regexes": {
+    "markdown_code": {
+      "backward": "```(.*)\n",
+      "backwardInclude": false,
+      "flags": "i",
+      "forward": "```",
+      "forwardInclude": false
+    },
+    "markdown_column": {
+      "backward": "\\|(\\s)*",
+      "backwardInclude": false,
+      "flags": "i",
+      "forward": "(\\s)*\\|",
+      "forwardInclude": false
+    }
+  },
+  "telemetry.telemetryLevel": "off",
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
+  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.stickyScroll.enabled": true,
+  "terraform.languageServer.enable": true,
+  "window.zoomLevel": -1,
+  "workbench.activityBar.location": "top",
+  "workbench.colorCustomizations": {},
+  "workbench.colorTheme": "One Monokai",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.startupEditor": "none"
+}

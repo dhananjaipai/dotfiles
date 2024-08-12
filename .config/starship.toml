@@ -1,0 +1,131 @@
+command_timeout = 1000
+add_newline = false
+
+format = """
+$status\
+$line_break\
+[░▒▓](#2d3436)\
+$env_var\
+[](fg:#2d3436 bg:#22272e)\
+$directory\
+$git_branch\
+$git_status\
+$git_metrics\
+$fill\
+$azure\
+$aws\
+$gcloud\
+$kubernetes\
+$python\
+$nodejs\
+$terraform\
+$container\
+$cmd_duration $jobs $time\
+$line_break\
+$character
+"""
+
+[fill]
+symbol = ' '
+
+[character]
+success_symbol = '[➜](bold green)'
+error_symbol = '[✗](bold red) '
+
+# Shows an icon that should be included by zshrc script based on the distribution or os
+[env_var.STARSHIP_PROMPT_DISTRO]
+format = '[ $env_value ](bg:#2d3436)'
+variable = 'STARSHIP_PROMPT_DISTRO'
+disabled = false
+
+[directory]
+style = 'fg:#adbac7 bg:#22272e'
+format = '[ $path ]($style)[](fg:#22272e)'
+repo_root_style = 'fg:#539bf5 bg:#22272e'
+repo_root_format = '[ $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path ]($style)[](fg:#22272e bg:#273449)[$read_only]($read_only_style)'
+truncation_length = 4
+fish_style_pwd_dir_length = 5
+truncate_to_repo = false
+truncation_symbol = '…/'
+
+[directory.substitutions]
+'Documents' = ' Documents'
+'Downloads' = ' Downloads'
+'Music' = ' Music'
+'Pictures' = ' Pictures'
+
+[git_branch]
+style = 'fg:#539bf5 bg:#273449 '
+format = '[ $symbol$branch(:$remote_branch) ]($style)'
+
+[git_status]
+style = 'bold fg:#768390 bg:#273449'
+format = '([\[$all_status$ahead_behind\] ]($style)[](fg:#273449 bg:#22272e)) '
+ahead = '⇡${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+behind = '⇣${count}'
+
+[git_metrics]
+disabled = false
+added_style = '#57ab5a'
+deleted_style = '#f47067'
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+
+[azure]
+disabled = true
+style = 'blue bold'
+symbol = 'ﴃ '
+format = '[$symbol($subscription)]($style) '
+
+[aws]
+disabled = true
+style = 'bold #FB8532'
+symbol = ' '
+format = '[$symbol($profile )(\($region\) )(\[$duration\] )]($style)'
+
+[gcloud]
+disabled = true
+symbol = ''
+format = '[$symbol$account(@$domain)(\($region\)) ]($style)'
+
+[kubernetes]
+disabled = true
+format = '[$symbol$context( \($namespace\)) ]($style)'
+
+[nodejs]
+disabled = true
+format = '[$symbol($version )]($style)'
+
+[python]
+disabled = true
+symbol = ' '
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+
+[terraform]
+disabled = true
+symbol = ''
+style = 'fg:#844fba'
+format = '[$symbol .tf ]($style)'
+
+[cmd_duration]
+style = 'bold #daaa3f'
+format = '[$duration]($style) '
+
+[jobs]
+disabled = false
+number_threshold = 1
+format = '[\[$number\] jobs](fg:#8ddb8c)'
+
+[time]
+disabled = false
+time_format = '%R'                           # Hour:Minute Format
+format = '[[  $time ](fg:#FAFBFC)]($style)'
+
+[line_break]
+disabled = false
+
+[status]
+symbol = '💥 '
+format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
+map_symbol = true
+disabled = false

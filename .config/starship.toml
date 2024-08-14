@@ -41,7 +41,7 @@ disabled = false
 [directory]
 style = 'fg:#adbac7 bg:#22272e'
 format = '[ $path ]($style)[](fg:#22272e)'
-repo_root_style = 'fg:#539bf5 bg:#22272e'
+repo_root_style = 'italic fg:#56b6c2 bg:#22272e'
 repo_root_format = '[ $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path ]($style)[](fg:#22272e bg:#273449)[$read_only]($read_only_style)'
 truncation_length = 4
 fish_style_pwd_dir_length = 5
@@ -55,21 +55,23 @@ truncation_symbol = '…/'
 'Pictures' = ' Pictures'
 
 [git_branch]
-style = 'fg:#539bf5 bg:#273449 '
+style = 'fg:#56b6c2 bg:#273449 '
 format = '[ $symbol$branch(:$remote_branch) ]($style)'
 
 [git_status]
 style = 'bold fg:#768390 bg:#273449'
-format = '([\[$all_status$ahead_behind\] ]($style)[](fg:#273449 bg:#22272e)) '
+format = '([$all_status$ahead_behind]($style)[](fg:#273449)) '
+up_to_date = ""
+modified = "*"
 ahead = '⇡${count}'
 diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 behind = '⇣${count}'
 
 [git_metrics]
 disabled = false
-added_style = '#57ab5a'
-deleted_style = '#f47067'
-format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+added_style = '#a9dc76'
+deleted_style = '#fc6a67'
+format = '[+$added]($added_style) [-$deleted]($deleted_style) '
 
 [azure]
 disabled = true

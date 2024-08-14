@@ -89,11 +89,19 @@
   // #endregion
   // #region: Select
   {
-    "key": "ctrl+a",
+    "key": "ctrl+a a",
     "when": "editorTextFocus",
     "command": "selectby.regex",
     "args": [
       "markdown_code"
+    ]
+  },
+  {
+    "key": "ctrl+a c",
+    "when": "editorTextFocus",
+    "command": "selectby.regex",
+    "args": [
+      "markdown_column"
     ]
   },
   // #endregion
@@ -239,6 +247,43 @@
     "when": "editorTextFocus && foldingEnabled"
   },
   // #endregion
+  // #region: Fix Git Panel focus to Cmd+Shift+G
+  {
+    "key": "shift+cmd+g",
+    "command": "-editor.action.previousMatchFindAction",
+    "when": "editorFocus"
+  },
+  {
+    "key": "shift+cmd+g",
+    "command": "-workbench.action.terminal.openDetectedLink",
+    "when": "accessibleViewIsShown && terminalHasBeenCreated && accessibleViewCurrentProviderId == 'terminal'"
+  },
+  {
+    "key": "shift+cmd+g",
+    "command": "-workbench.action.terminal.findPrevious",
+    "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
+  },
+  {
+    "key": "shift+cmd+g",
+    "command": "workbench.view.scm",
+    "when": "workbench.scm.active"
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "-workbench.view.scm",
+    "when": "workbench.scm.active"
+  },
+  {
+    "key": "shift+cmd+g",
+    "command": "workbench.view.scm",
+    "when": "workbench.scm.active && !gitlens:disabled && config.gitlens.keymap == 'chorded'"
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "-workbench.view.scm",
+    "when": "workbench.scm.active && !gitlens:disabled && config.gitlens.keymap == 'chorded'"
+  },
+  // #endregion
   // #region: Git Ctrl + g [h(file history), g(graph), r(refresh), a (add/stage file), s(stage selected range), d(unstage selected range), 1/2 (mark and compare selection), e(error lens), c (changes uncommitted), l (toggle gitlens)]
   {
     "key": "cmd+g",
@@ -320,20 +365,21 @@
     "when": "isInDiffEditor && !operationInProgress"
   },
   // #endregion
-  // #region: Helm Preview
+  // #region: Preview : Helm.CSV
   {
     "key": "cmd+k v",
     "command": "helm-template-preview-and-more.open-helm-template-preview",
     "when": "editorLangId == 'helm'"
   },
+  {
+    "key": "cmd+k v",
+    "command": "csv.preview",
+    "when": "editorLangId == 'csv' || editorLangId == 'tsv' || editorLangId == 'csv (semicolon)' || editorLangId == 'csv(pipe)'"
+  },
   // #endregion
   // #region: Edit Location Nav
   // System Default
-  // {
-  // "key": "ctrl+-",
-  // "command": "workbench.action.navigateBack",
-  // "when": "canNavigateBack"
-  // },
+  // ctrl+- : workbench.action.navigateBack
   {
     "key": "ctrl+=",
     "command": "workbench.action.navigateForward",
@@ -379,7 +425,7 @@
   // #endregion
   // #region: Multi Cursor
   // System Default
-  // "key": "alt+enter", Select all occurrences of find match
+  // alt+enter : Select all occurrences of find match
   {
     "key": "ctrl+cmd+l",
     "command": "editor.action.insertCursorAtEndOfEachLineSelected",
@@ -389,6 +435,24 @@
     "key": "shift+alt+i",
     "command": "-editor.action.insertCursorAtEndOfEachLineSelected",
     "when": "editorTextFocus"
-  }
+  },
+  // #endregion
+  // #region: Advanced New File - Cmd+Shift+N ; New Window - Cmd+Ctrl+N
+  {
+    "key": "ctrl+cmd+n",
+    "command": "workbench.action.newWindow"
+  },
+  {
+    "key": "shift+cmd+n",
+    "command": "-workbench.action.newWindow"
+  },
+  {
+    "key": "shift+cmd+n",
+    "command": "extension.advancedNewFile"
+  },
+  {
+    "key": "alt+cmd+n",
+    "command": "-extension.advancedNewFile"
+  },
   // #endregion
 ]

@@ -60,7 +60,7 @@ export AUTO_NOTIFY_IGNORE=("ssh" "sleep")
 
 # region: WebSearch
 alias ai='__perplexity(){ local param=$(omz_urlencode "$*"); open_command "https://www.perplexity.ai/?s=o&q=$param" }; __perplexity'
-alias ddg='__ddg(){ local param=$(omz_urlencode "$*"); open_command "https://duckduckgo.com/q=$param" }; __ddg'
+alias ddg='__ddg(){ local param=$(omz_urlencode "$*"); open_command "https://duckduckgo.com/?q=$param" }; __ddg'
 # endregion: WebSearch
 
 # region: Git aliases

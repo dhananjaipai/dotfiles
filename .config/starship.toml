@@ -2,8 +2,7 @@ command_timeout = 1000
 add_newline = false
 
 format = """
-$status\
-$line_break\
+($status\n)\
 [░▒▓](#2d3436)\
 $env_var\
 [](fg:#2d3436 bg:#22272e)\

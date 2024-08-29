@@ -89,15 +89,25 @@
   // #endregion
   // #region: Select
   {
-    "key": "ctrl+a a",
+    "key": "ctrl+a /",
+    "command": "editor.action.toggleColumnSelection",
     "when": "editorTextFocus",
-    "command": "selectby.regex",
-    "args": [
-      "markdown_code"
-    ]
+  },
+  {
+    "key": "ctrl+a b",
+    "command": "editor.action.selectToBracket",
+    "when": "editorTextFocus",
   },
   {
     "key": "ctrl+a c",
+    "command": "selectby.regex",
+    "args": [
+      "markdown_code"
+    ],
+    "when": "editorTextFocus",
+  },
+  {
+    "key": "ctrl+a l",
     "when": "editorTextFocus",
     "command": "selectby.regex",
     "args": [
@@ -453,6 +463,126 @@
   {
     "key": "alt+cmd+n",
     "command": "-extension.advancedNewFile"
+  },
+  // #endregion
+  // #region : Explorer Focus customizations
+  {
+    "key": "shift+cmd+e",
+    "command": "-workbench.view.explorer",
+    "when": "viewContainer.workbench.view.explorer.enabled"
+  },
+  {
+    "key": "shift+cmd+e",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        {
+          "command": "workbench.view.explorer"
+        },
+        {
+          "command": "workbench.explorer.fileView.focus"
+        }
+      ]
+    },
+    "when": "viewContainer.workbench.view.explorer.enabled"
+  },
+  {
+    "key": "escape",
+    "command": "workbench.action.focusFirstEditorGroup",
+    "when": "filesExplorerFocus"
+  },
+  // #endregion
+  // #region : BreadCrumb Focus customizations
+  {
+    "key": "cmd+shift+.",
+    "command": "-editor.action.inPlaceReplace.down",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+shift+.",
+    "command": "-breadcrumbs.toggleToOn",
+    "when": "!config.breadcrumbs.enabled"
+  },
+  {
+    "key": "cmd+shift+b",
+    "command": "-workbench.action.tasks.build",
+    "when": "taskCommandsRegistered"
+  },
+  {
+    "key": "cmd+shift+b",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        {
+          "command": "breadcrumbs.toggleToOn",
+        },
+        {
+          "command": "breadcrumbs.focusAndSelect",
+        }
+      ]
+    },
+    "when": "editorFocus && !breadcrumbsVisible"
+  },
+  {
+    "key": "cmd+shift+b",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        {
+          "command": "breadcrumbs.toggle",
+        },
+        {
+          "command": "workbench.action.focusFirstEditorGroup",
+        },
+      ]
+    },
+    "when": "breadcrumbsVisible"
+  },
+  {
+    "key": "escape",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        {
+          "command": "breadcrumbs.toggle",
+        },
+        {
+          "command": "workbench.action.focusFirstEditorGroup",
+        },
+      ]
+    },
+    "when": "breadcrumbsActive"
+  },
+  // #endregion
+  // #region : Terminal customizations
+  {
+    "key": "cmd+alt+up",
+    "command": "workbench.action.terminal.new",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+t",
+    "command": "workbench.action.terminal.new",
+    "when": "(terminalProcessSupported || terminalWebExtensionContributedProfile) && terminalFocus"
+  },
+  {
+    "key": "cmd+w",
+    "command": "workbench.action.terminal.killActiveTab",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+shift+`",
+    "command": "-workbench.action.terminal.new",
+    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+  },
+  {
+    "key": "cmd+w",
+    "command": "workbench.action.closeActiveEditor",
+    "when": "editorFocus"
+  },
+  {
+    "key": "cmd+w",
+    "command": "-workbench.action.closeActiveEditor"
   },
   // #endregion
 ]

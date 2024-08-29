@@ -54,6 +54,7 @@
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
+  "breadcrumbs.enabled": false,
   "code-runner.runInTerminal": false,
   "color-highlight.markerType": "background",
   "color-highlight.markRuler": false,
@@ -76,12 +77,11 @@
   "editor.copyWithSyntaxHighlighting": false,
   "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
-  "editor.fontSize": 12,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "editor.insertSpaces": true,
-  "editor.lineHeight": 0,
+  "editor.minimap.renderCharacters": false,
   "editor.renderControlCharacters": true,
   "editor.stickyScroll.enabled": false,
   "editor.tabSize": 2,
@@ -172,14 +172,18 @@
   "window.newWindowDimensions": "maximized",
   "window.zoomLevel": -1,
   "workbench.activityBar.location": "top",
-  "workbench.colorCustomizations": {},
+  "workbench.colorCustomizations": {
+    "[One Monokai]": {
+      "editor.selectionBackground": "#6B717D"
+    }
+  },
   "workbench.colorTheme": "One Monokai",
   // Add custom patterns for file names instead of static names
   "workbench.editor.customLabels.patterns": {
     "*/**/index.html": "${dirname}/",
     "*/**/main.tf": "${dirname}/main",
-    "*/**/variables.tf": "${dirname}/vars",
-    "*/**/outputs.tf": "${dirname}/outputs"
+    "*/**/outputs.tf": "${dirname}/outputs",
+    "*/**/variables.tf": "${dirname}/variables"
   },
   "workbench.iconTheme": "material-icon-theme",
   "workbench.productIconTheme": "fluent-icons",

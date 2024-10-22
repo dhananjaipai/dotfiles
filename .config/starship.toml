@@ -4,9 +4,10 @@ add_newline = false
 format = """
 ($status\n)\
 [░▒▓](#2d3436)\
-$env_var\
+${env_var.DISTRO}\
 [](fg:#2d3436 bg:#22272e)\
 $directory\
+${env_var.git_user}\
 $git_branch\
 $git_status\
 $git_metrics\
@@ -32,7 +33,7 @@ success_symbol = '[➜](bold green)'
 error_symbol = '[✗](bold red) '
 
 # Shows an icon that should be included by zshrc script based on the distribution or os
-[env_var.STARSHIP_PROMPT_DISTRO]
+[env_var.DISTRO]
 format = '[ $env_value ](bg:#2d3436)'
 variable = 'STARSHIP_PROMPT_DISTRO'
 disabled = false
@@ -52,6 +53,11 @@ truncation_symbol = '…/'
 'Downloads' = ' Downloads'
 'Music' = ' Music'
 'Pictures' = ' Pictures'
+
+# Shows the git author in commits
+[env_var.git_user]
+format = '[ \[$env_value\] ](fg:#56b6c2 bg:#273449)'
+variable = 'GIT_AUTHOR_EMAIL'
 
 [git_branch]
 style = 'fg:#56b6c2 bg:#273449 '

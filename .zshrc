@@ -219,6 +219,12 @@ function timezsh() { # Look at time taken to start zsh
 	for i in $(seq 1 10); do /usr/bin/time "$shell" -i -c exit; done
 }
 
+function clearhist() { # Clear items from history
+	# LC_ALL=C sed -i '' "/$1/d" $HISTFILE
+	LC_ALL=C perl -0777 -pi -e "s/: \d*:\d;$1.*?:/:/gs" $HISTFILE
+	# Example - clearhist "aws s3 rb"
+}
+
 # record all commands and outputs to a file
 function record() {
 	suffix=$1

@@ -43,6 +43,12 @@
     "editor.defaultFormatter": "djpai.faster-format-with-cli",
     "editor.formatOnSave": false
   },
+  "[powershell]": {
+    "editor.defaultFormatter": "ms-vscode.powershell"
+  },
+  "[terraform-vars]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
   "[terraform]": {
     "djpai.format.command": "sed '/^$/N;/^\\n$/D' | terraform fmt -",
     "djpai.format.mode": "inline_stdin",
@@ -69,7 +75,7 @@
   "cSpell.ignoreWords": [],
   "cSpell.userWords": [],
   "debug.inlineValues": "on",
-  "diffEditor.ignoreTrimWhitespace": true,
+  "diffEditor.ignoreTrimWhitespace": false,
   "diffEditor.useInlineViewWhenSpaceIsLimited": false,
   "djpai.format.command": "npx prettier --ignore-unknown \"{file}\"",
   "djpai.format.mode": "inline_file_stdout",
@@ -77,10 +83,12 @@
   "editor.copyWithSyntaxHighlighting": false,
   "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
-  "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
-  "editor.formatOnType": true,
+  "editor.fontSize": 13,
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": false,
+  "editor.formatOnType": false,
   "editor.insertSpaces": true,
+  "editor.lineHeight": 0,
   "editor.minimap.renderCharacters": false,
   "editor.renderControlCharacters": true,
   "editor.stickyScroll.enabled": false,
@@ -117,9 +125,17 @@
   "files.defaultLanguage": "${activeEditorLanguage}",
   "git.autofetch": true,
   "git.confirmSync": false,
+  "git.email": "${env:GIT_COMMITTER_EMAIL}",
   "git.enableSmartCommit": true,
+  "git.name": "${env:GIT_COMMITTER_NAME}",
   "git.openRepositoryInParentFolders": "never",
   "git.smartCommitChanges": "all",
+  "github.copilot.enable": {
+    "*": true,
+    "markdown": false,
+    "plaintext": false,
+    "scminput": false
+  },
   "gitlens.changes.locations": [
     "gutter",
     "line"

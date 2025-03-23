@@ -128,7 +128,7 @@ zmodload zsh/complist
 # region: Custom completions
 _evalcache docker completion zsh
 _evalcache kubectl completion zsh
-_evalcache minikube completion zsh
+# _evalcache minikube completion zsh
 # endregion: Custom completions
 
 # region: Starship prompt
@@ -207,9 +207,17 @@ alias shellproxy="export https_proxy=socks5h://localhost:50000 && export http_pr
 alias cc="fc -lnr -1 | copy"; bindkey -s '^x' 'cc\n' # Copy last command with ctrl-x
 unalias md; function md() { [[ $# == 1 ]] && mkdir -p "$1" && cd "$1" || return; } # make and change to directory
 compdef _directories md
-function setupdocker() {
-	eval "$(minikube -p minikube docker-env)"
-}
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
+
+export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
+
+# alias minikube_start='minikube start --driver=qemu --network=socket_vmnet'
+# function setupdocker() {
+# 	eval "$(minikube -p minikube docker-env)"
+# }
 
 # endregion: Custom aliases
 
@@ -217,6 +225,14 @@ function setupdocker() {
 function timezsh() { # Look at time taken to start zsh
 	shell=${1-$SHELL}
 	for i in $(seq 1 10); do /usr/bin/time "$shell" -i -c exit; done
+}
+
+function alive() {
+	while true; do
+		cliclick m:300,300
+		sleep 10
+		cliclick m:305,305
+	done;
 }
 
 function clearhist() { # Clear items from history

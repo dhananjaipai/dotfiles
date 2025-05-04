@@ -26,22 +26,30 @@ export SAVEHIST='1000000000'
 # region: OhMyZSH
 export DISABLE_AUTO_UPDATE=true #Update OhMyZsh manually to speed up load times
 
+# region: Zsh tab completions for command options
+_comp_options+=(globdots) # Include hidden files
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+# autoload -U compinit # Already part of OhmyZSH
+# compinit -C # Already part of OhmyZSH
+# endregion: Zsh Tab completions
+
 export ZSH="$HOME/.oh-my-zsh"
 plugins=(
-	evalcache												# Faster Zsh Load times by caching eval outputs; 				Install: git clone https://github.com/mroth/evalcache ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/evalcache
-	zsh-autosuggestions							# Autocompletions based on history; 										Install: git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-	zsh-history-substring-search		# Allows fuzzy searching history; 											Install: git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
-	zsh-syntax-highlighting					# Enabled syntax highlighting in zsh; 									Install: git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-	auto-notify											# Notifications when long running processes complete; 	Install: git clone https://github.com/MichaelAquilina/zsh-auto-notify ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/auto-notify
-	last-working-dir								# Adds a command `lwd` that allows easy switching to last working directory from other shells
-	copybuffer 											# Use Ctrl+o to copy current command line command; Ref: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/copybuffer
-	thefuck    											# Esc+Esc to edit last command; Conflicts with sudo; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/thefuck/README.md
-	extract    											# Can unzip any compression type with `x`; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/extract/extract.plugin.zsh
-	# web-search										# Allows to open search results using aliases; just alias ddg and perplexity.ai manually below
-	# git														# Common git aliases; just aliased useful ones manually below
-	# sudo 													# Esc+Esc to run last command as sudo; Conflicts with thefuck
-	# dotenv 												# Using autoenv instead since it supports any shell scripts and functions
-	# per-directory-history 				# Use Ctrl+g to switch to directory-based history for faster switching; not very useful
+	evalcache							# Faster Zsh Load times by caching eval outputs; 				Install: git clone https://github.com/mroth/evalcache ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/evalcache
+	zsh-autosuggestions					# Autocompletions based on history; 							Install: git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+	zsh-history-substring-search		# Allows fuzzy searching history;								Install: git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+	zsh-syntax-highlighting				# Enabled syntax highlighting in zsh;							Install: git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+	auto-notify							# Notifications when long running processes complete; 			Install: git clone https://github.com/MichaelAquilina/zsh-auto-notify ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/auto-notify
+	last-working-dir					# Adds a command `lwd` that allows easy switching to last working directory from other shells
+	copybuffer 							# Use Ctrl+o to copy current command line command; Ref: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/copybuffer
+	thefuck    							# Esc+Esc to edit last command; Conflicts with sudo; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/thefuck/README.md
+	extract    							# Can unzip any compression type with `x`; Ref: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/extract/extract.plugin.zsh
+	# web-search						# Allows to open search results using aliases; just alias ddg and perplexity.ai manually below
+	# git								# Common git aliases; just aliased useful ones manually below
+	# sudo 								# Esc+Esc to run last command as sudo; Conflicts with thefuck
+	# dotenv 							# Using direnv instead since it supports any shell scripts and functions
+	# per-directory-history 			# Use Ctrl+g to switch to directory-based history for faster switching; not very useful
 )
 
 source "$ZSH/oh-my-zsh.sh"
@@ -117,14 +125,6 @@ zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 # endregion Zsh Syntax Highlighting fix
 
-# region: Zsh tab completions for command options
-_comp_options+=(globdots) # Include hidden files
-# autoload -U compinit # Already part of OhmyZSH
-zstyle ':completion:*' menu select
-zmodload zsh/complist
-compinit -C
-# endregion: Zsh Tab completions
-
 # region: Custom completions
 _evalcache docker completion zsh
 _evalcache kubectl completion zsh
@@ -140,15 +140,10 @@ export STARSHIP_PROMPT_DISTRO="$macos"
 _evalcache /usr/local/bin/starship init zsh --print-full-init
 # endregion: Starship
 
-# region: autoenv + zoxide; Ref: https://github.com/hyperupcall/autoenv and https://github.com/ajeetdsouza/zoxide
-export AUTOENV_ENABLE_LEAVE='yes'         # Run .env.leave when leaving directory
-export AUTOENV_PRESERVE_CD='yes'          # Do not overwrite `cd`; Done through ZOxide
-source /usr/local/opt/autoenv/activate.sh # Setup autoenv
-_evalcache zoxide init zsh --cmd cd       # Setup Zoxide and overwrite `cd`
-function __zoxide_cd() {
-	autoenv_cd "${@}"
-} # Overwite ZOxide to use autoenv
-# endregion: autoenv + zoxide
+# region: direnv
+_evalcache direnv hook zsh
+# endregion: direnv
+
 
 # region: fzf
 # Set up fzf key bindings and fuzzy completion

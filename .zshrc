@@ -122,7 +122,7 @@ _comp_options+=(globdots) # Include hidden files
 # autoload -U compinit # Already part of OhmyZSH
 zstyle ':completion:*' menu select
 zmodload zsh/complist
-# compinit # Already part of OhmyZSH
+compinit -C
 # endregion: Zsh Tab completions
 
 # region: Custom completions

@@ -20,7 +20,7 @@
     "editor.defaultFormatter": "djpai.faster-format-with-cli"
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.json-language-features"
   },
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
@@ -60,7 +60,6 @@
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
-  "breadcrumbs.enabled": false,
   "code-runner.runInTerminal": false,
   "color-highlight.markerType": "background",
   "color-highlight.markRuler": false,
@@ -83,7 +82,7 @@
   "editor.copyWithSyntaxHighlighting": false,
   "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
-  "editor.fontSize": 13,
+  "editor.fontSize": 14,
   "editor.formatOnPaste": false,
   "editor.formatOnSave": false,
   "editor.formatOnType": false,
@@ -148,7 +147,7 @@
   "gitlens.statusBar.enabled": false,
   "gitlens.terminalLinks.enabled": false,
   "hadolint.hadolintPath": "/usr/local/bin/hadolint",
-  // "http.proxy": "socks5h://localhost:50000",
+  // "http.proxy": "http://192.168.1.243:8080",
   // "http.proxyStrictSSL": false,
   "indentRainbow.colors": [
     "rgba(29, 78, 137,0.15)",
@@ -203,5 +202,15 @@
   },
   "workbench.iconTheme": "material-icon-theme",
   "workbench.productIconTheme": "fluent-icons",
-  "workbench.startupEditor": "none"
+  "workbench.startupEditor": "none",
+  "chat.agent.enabled": true,
+  "mcp": {
+    "servers": {
+        "Context7": {
+          "type": "stdio",
+          "command": "npx",
+          "args": ["-y", "@upstash/context7-mcp@latest"]
+        }
+    }
+  },
 }

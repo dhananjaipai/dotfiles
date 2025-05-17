@@ -1,0 +1,149 @@
+# Zsh Session Recording Script
+# Records commands and their output.
+
+export ZSH_RECORDINGS_DIR="${HOME}/.zsh-recordings"
+export ZSH_RECORDING_PREFIX="zsh-session"
+
+mkdir -p "${ZSH_RECORDINGS_DIR}"
+
+# Internal variables for active recording state
+_current_record_file=""
+_zsh_recording_fd=""
+
+# Get the full path for a recording file
+_get_recording_path() {
+  local suffix="$1"
+  echo "${ZSH_RECORDINGS_DIR}/${ZSH_RECORDING_PREFIX}-${suffix}.log"
+}
+
+# Preexec hook to log commands
+_zsh_recording_preexec() {
+  [[ -n "$_zsh_recording_fd" && -n "$_current_record_file" ]] && \
+    echo "\$ $(print -P "$1")" >> "$_current_record_file"
+}
+
+# --- Main Functions ---
+
+# Start recording a Zsh session.
+# Usage: record [suffix]
+function record() {
+  local suffix="${1:-$(date "+%Y%m%d_%H%M%S")}"
+  local record_file="$(_get_recording_path "$suffix")"
+
+  if [[ -n "$_zsh_recording_fd" ]]; then
+    echo "Already recording to $_current_record_file. Stop current recording first."
+    return 1
+  fi
+
+  # Redirect stdout and stderr to tee, keeping original stdout on FD 3
+  exec 3>&1 1> >(tee -a "$record_file") 2>&1
+
+  _current_record_file="$record_file"
+  _zsh_recording_fd="3" # Store FD 3 as active
+
+  # Add preexec hook if not already present
+  if ! [[ "${preexec_functions[@]}" =~ "_zsh_recording_preexec" ]]; then
+    preexec_functions+=( _zsh_recording_preexec )
+  fi
+
+  echo "--- Session Recording Started: $(date) ---" | tee -a "$record_file"
+  echo "Recording all commands and output to: $record_file"
+}
+
+# Stop the current Zsh session recording.
+function stop-recording() {
+  [[ -z "$_zsh_recording_fd" ]] && { echo "Not currently recording." >&2; return 1; }
+
+  echo "--- Session Recording Stopped: $(date) ---" | tee -a "$_current_record_file"
+
+  # Restore original stdout and close FD 3
+  exec 1>&"$_zsh_recording_fd" 2>&1 3>&-
+
+  _current_record_file=""
+  _zsh_recording_fd=""
+
+  # Remove preexec hook
+  preexec_functions=( "${preexec_functions[@]##_zsh_recording_preexec}" )
+
+  echo "Recording stopped."
+}
+
+# Open a recorded session.
+# Usage: open-recording [suffix]
+function open-recording() {
+  local suffix="$1"
+  local record_file
+
+  if [[ -z "$suffix" ]]; then
+    echo "Available recordings in $ZSH_RECORDINGS_DIR:"
+
+    local raw_files=( "${ZSH_RECORDINGS_DIR}/${ZSH_RECORDING_PREFIX}-"*.log(N) )
+    local recordings=()
+
+    for file in "${raw_files[@]}"; do
+      local basename_file="${file##*/}"
+      local extracted_suffix="${basename_file#${ZSH_RECORDING_PREFIX}-}"
+      extracted_suffix="${extracted_suffix%.log}"
+      [[ -n "$extracted_suffix" ]] && recordings+=( "$extracted_suffix" )
+    done
+
+    recordings=( $(printf "%s\n" "${recordings[@]}" | sort -r) )
+
+    if [[ ${#recordings[@]} -eq 0 ]]; then
+      echo "No recordings found in '$ZSH_RECORDINGS_DIR'." >&2
+      return 1
+    fi
+
+    for i in {1..${#recordings[@]}}; do
+      echo "  $(printf "%2d" $i) ) ${recordings[$i]}"
+    done
+
+    echo -n "Enter number to open (or press Enter to cancel): "
+    read -r choice
+
+    if [[ -z "$choice" ]]; then
+      echo "Cancelled."
+      return 0
+    fi
+
+    if ! [[ "$choice" =~ ^[0-9]+$ ]] || (( choice < 1 )) || (( choice > ${#recordings[@]} )); then
+      echo "Invalid selection: $choice" >&2
+      return 1
+    fi
+    suffix="${recordings[$choice]}"
+  fi
+
+  record_file="$(_get_recording_path "$suffix")"
+  [[ ! -f "$record_file" ]] && {
+    echo "Error: Recording file not found: '$record_file'." >&2
+    return 1;
+  }
+
+  echo "Opening: $record_file"
+  \less -r "$record_file"
+}
+
+# Delete recordings.
+# Usage: delete-recording [suffix]
+function delete-recording() {
+  local suffix="$1"
+  if [[ -n "$suffix" ]]; then
+    local record_file="$(_get_recording_path "$suffix")"
+    if [[ -f "$record_file" ]]; then
+      echo "Deleting: $record_file"
+      \rm -v "$record_file"
+    else
+      echo "Recording file not found: '$record_file'." >&2
+      return 1
+    fi
+  else
+    read -q "ans?Delete ALL recordings in '$ZSH_RECORDINGS_DIR'?[y/N] "
+    echo
+    if [[ "$ans" = 'y' ]]; then
+      echo 'Deleting files...'
+      \find "$ZSH_RECORDINGS_DIR" -maxdepth 1 -type f -name "${ZSH_RECORDING_PREFIX}-*.log" -delete
+    else
+      echo 'Cancelled.'
+    fi
+  fi
+}

@@ -82,7 +82,7 @@
   "editor.copyWithSyntaxHighlighting": false,
   "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
-  "editor.fontSize": 14,
+  "editor.fontSize": 13,
   "editor.formatOnPaste": false,
   "editor.formatOnSave": false,
   "editor.formatOnType": false,
@@ -147,7 +147,7 @@
   "gitlens.statusBar.enabled": false,
   "gitlens.terminalLinks.enabled": false,
   "hadolint.hadolintPath": "/usr/local/bin/hadolint",
-  // "http.proxy": "http://192.168.1.243:8080",
+  // "http.proxy": "http://192.168.2.15:8080",
   // "http.proxyStrictSSL": false,
   "indentRainbow.colors": [
     "rgba(29, 78, 137,0.15)",
@@ -204,13 +204,13 @@
   "workbench.productIconTheme": "fluent-icons",
   "workbench.startupEditor": "none",
   "chat.agent.enabled": true,
-  "mcp": {
-    "servers": {
-        "Context7": {
-          "type": "stdio",
-          "command": "npx",
-          "args": ["-y", "@upstash/context7-mcp@latest"]
-        }
-    }
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "editor.accessibilitySupport": "off",
+  "workbench.editorAssociations": {
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.svg": "editor.excalidraw"
+  }
 }

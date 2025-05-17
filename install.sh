@@ -5,6 +5,7 @@ ln -sf "${DOTFILE_REPO}/.config/Code/User/settings.json" ~/Library/Application\ 
 ln -sf "${DOTFILE_REPO}/.config/Code/User/keybindings.json" ~/Library/Application\ Support/Code/User/keybindings.json
 
 ln -sf "${DOTFILE_REPO}/.zshrc" ~/.zshrc
+ln -sf "${DOTFILE_REPO}/.zshrecord" ~/.zshrecord
 mkdir -p ~/.config/lf
 ln -sf "${DOTFILE_REPO}/.config/lf/lfrc" ~/.config/lf/lfrc
 ln -sf "${DOTFILE_REPO}/.config/starship.toml" ~/.config/starship.toml

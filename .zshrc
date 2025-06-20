@@ -5,6 +5,7 @@ setopt \
 	hist_expire_dups_first \
 	hist_find_no_dups \
 	hist_ignore_dups \
+	hist_ignore_all_dups \
 	hist_ignore_space \
 	hist_save_no_dups \
 	interactive_comments \
@@ -16,11 +17,12 @@ setopt \
 	no_list_types \
 	no_prompt_bang \
 	no_prompt_subst \
-	share_history
+  share_history
 
 # Do not lose history!
 export HISTSIZE='1000000000'
 export SAVEHIST='1000000000'
+export HISTDUP=erase
 
 # region: Zinit
 zstyle ':zinit:*' disable-auto-update 'yes'
@@ -39,6 +41,8 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
 zinit light-mode for \
+	zsh-users/zsh-completions \
+  Aloxaf/fzf-tab \
 	mroth/evalcache
 # Turbo mode for faster loading (load plugins after prompt)
 zinit wait lucid for \
@@ -48,14 +52,23 @@ zinit wait lucid for \
 	MichaelAquilina/zsh-auto-notify
 
 _comp_options+=(globdots) # Include hidden files
-zstyle ':completion:*' menu select
+# Completion styling
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+
 zmodload zsh/complist
 
 # Initialize completions
 autoload -Uz compinit
 compinit -C
+zinit cdreplay -q
+
+unalias zi
 # endregion: Zinit
 
 # region: OhMyZsh Helpers
@@ -133,6 +146,23 @@ bindkey '^[[B' history-substring-search-down
 export AUTO_NOTIFY_THRESHOLD=60
 export AUTO_NOTIFY_IGNORE=("ssh" "sleep")
 # endregion: Auto notify
+
+# region: zoxide
+# Lazy-load zoxide
+_z_load() {
+  # Unset the wrapper function to avoid recursive calls
+  unfunction z zi 2>/dev/null || true
+  # Load zoxide using evalcache
+  _evalcache zoxide init zsh || {
+    echo "Failed to load zoxide" >&2
+    return 1
+  }
+  # Call the actual zoxide function
+  
+}
+z() { _z_load; __zoxide_z "$@"; }
+zi() { _z_load; __zoxide_zi "$@"; }
+# endregion: zoxide
 
 # region: WebSearch
 alias ppx='__perplexity(){ local param=$(omz_urlencode "$*"); open_command "https://www.perplexity.ai/?s=o&q=$param" }; __perplexity'
@@ -243,7 +273,8 @@ _evalcache direnv hook zsh
 # region: fzf
 # Set up fzf key bindings and fuzzy completion
 export FZF_COMPLETION_TRIGGER="*"
-export FZF_DEFAULT_OPTS="--layout=reverse --history=$HOME/.fzf-history"
+export FZF_DEFAULT_OPTS="--layout=reverse --history=$HOME/.fzf-history --preview 'bat --style=numbers   --color=always --line-range :500 {} || head -500 {}'"
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --glob "!.git/*"'
 _evalcache fzf --zsh
 # endregion: fzf
 
@@ -356,7 +387,7 @@ function alive() {
 	done;
 }
 
-function clearhist() { # Clear items from history
+function clearhist() { # Clear items frkom history
     if [[ -z "$1" ]]; then; echo "Usage: clearhist <command_to_clear>"; return 1; fi
     LC_ALL=C perl -i -ne "print unless /$1/" "$HISTFILE"
     local old_histsize="$HISTSIZE"

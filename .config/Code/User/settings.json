@@ -52,7 +52,7 @@
   "[terraform]": {
     "djpai.format.command": "sed '/^$/N;/^\\n$/D' | terraform fmt -",
     "djpai.format.mode": "inline_stdin",
-    "editor.defaultFormatter": "djpai.faster-format-with-cli"
+    "editor.defaultFormatter": "hashicorp.terraform"
   },
   "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml"
@@ -82,7 +82,7 @@
   "editor.copyWithSyntaxHighlighting": false,
   "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
-  "editor.fontSize": 13,
+  "editor.fontSize": 12,
   "editor.formatOnPaste": false,
   "editor.formatOnSave": false,
   "editor.formatOnType": false,
@@ -129,12 +129,6 @@
   "git.name": "${env:GIT_COMMITTER_NAME}",
   "git.openRepositoryInParentFolders": "never",
   "git.smartCommitChanges": "all",
-  "github.copilot.enable": {
-    "*": true,
-    "markdown": false,
-    "plaintext": false,
-    "scminput": false
-  },
   "gitlens.changes.locations": [
     "gutter",
     "line"
@@ -192,7 +186,7 @@
       "editor.selectionBackground": "#6B717D"
     }
   },
-  "workbench.colorTheme": "One Monokai",
+  "workbench.colorTheme": "Bearded Theme feat. Melle Julie",
   // Add custom patterns for file names instead of static names
   "workbench.editor.customLabels.patterns": {
     "*/**/index.html": "${dirname}/",
@@ -211,6 +205,17 @@
   "editor.accessibilitySupport": "off",
   "workbench.editorAssociations": {
     "*.copilotmd": "vscode.markdown.preview.editor",
-    "*.svg": "editor.excalidraw"
+    "*.excalidraw.svg": "editor.excalidraw"
+  },
+  "github-enterprise.uri": "https://ericsson.ghe.com",
+  "github.copilot.advanced": {
+    "authProvider": "github-enterprise"
+  },
+  "breadcrumbs.enabled": false,
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
   }
 }

@@ -412,11 +412,11 @@
     "command": "-extension.hungryDelete",
     "when": "editorTextFocus && !editorReadonly"
   },
-  {
-    "key": "cmd+v",
-    "command": "pasteAndIndent.action",
-    "when": "editorTextFocus && !editorReadonly"
-  },
+  // {
+  //   "key": "cmd+v",
+  //   "command": "pasteAndIndent.action",
+  //   "when": "editorTextFocus && !editorReadonly"
+  // },
   {
     "key": "cmd+shift+v",
     "command": "editor.action.clipboardPasteAction",
@@ -584,5 +584,10 @@
     "key": "cmd+w",
     "command": "-workbench.action.closeActiveEditor"
   },
+  {
+    "key": "ctrl+shift+alt+cmd+1",
+    "command": "github.copilot.completions.toggle",
+    "when": "github.copilot.activated"
+  }
   // #endregion
 ]
